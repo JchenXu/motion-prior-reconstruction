@@ -1,0 +1,60 @@
+DEBUG: false
+DEBUG_FREQ: 5
+LOGDIR: ''
+DEVICE: 'cuda'
+EXP_NAME: 'mp_reconstruct_3dpw' # mpose_16frm_overlap0_kl1e-2_h36m_dup4_attpt_noocc_noise'
+OUTPUT_DIR: 'results/publish'
+NUM_WORKERS: 8
+SEED_VALUE: -1
+DATASET:
+  SEQLEN: 16
+LOSS:
+  KP_2D_W: 300.0
+  KP_3D_W: 300.0
+  SHAPE_W: 0.06
+  POSE_W: 60.0
+  D_MOTION_LOSS_W: 0.5
+TRAIN:
+  BATCH_SIZE: 32
+  NUM_ITERS_PER_EPOCH: 1000
+  PRETRAINED: ''
+  PRETRAINED_REGRESSOR: ''
+  MP_DIR: '/mnt/lustre/xujiachen/project/human_motion_prior/human_motion_prior'
+  MP_PATH: 'test/TR00_E267.pt'
+  MP_INI: 'test/TR00_motion_prior.ini'
+  RESUME: ''
+  START_EPOCH: 0
+  END_EPOCH: 200
+  LR_PATIENCE: 20
+  DATA_2D_RATIO: 0.6
+  DATASETS_2D:
+    - 'Insta'
+#    - 'PoseTrack'
+#    - 'PennAction'
+  DATASETS_3D:
+    - 'ThreeDPW'
+    - 'MPII3D'
+    - 'H36M'
+  DATASET_EVAL: 'ThreeDPW'
+  GEN_LR: 0.00008
+  GEN_WD: 0.0
+  MOT_DISCR:
+    OPTIM: 'Adam'
+    LR: 0.0001
+    WD: 0.0001
+    MOMENTUM: 0.9
+    HIDDEN_SIZE: 1024
+    NUM_LAYERS: 2
+    FEATURE_POOL: 'attention'
+    ATT:
+      LAYERS: 3
+      SIZE: 1024
+      DROPOUT: 0.2
+MODEL:
+  TEMPORAL_TYPE: 'gru'
+  TGRU:
+    NUM_LAYERS: 2
+    ADD_LINEAR: true
+    RESIDUAL: true
+    BIDIRECTIONAL: false
+    HIDDEN_SIZE: 1024
