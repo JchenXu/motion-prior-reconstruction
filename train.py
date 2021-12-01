@@ -25,7 +25,7 @@ from torch.utils.tensorboard import SummaryWriter
 
 from lib.core.loss import VIBELoss
 from lib.core.trainer import Trainer
-from lib.core.config import parse_args
+from lib.core.config import parse_args, MP_DATA_DIR
 from lib.utils.utils import prepare_output_dir
 from lib.models import VIBE, MotionDiscriminator
 from lib.dataset.loaders import get_data_loaders
@@ -136,18 +136,18 @@ def main(cfg):
         verbose=True,
     )
 
-
-    mp_dir = cfg.TRAIN.MP_DIR
-    mp_path = os.path.join(mp_dir, cfg.TRAIN.MP_PATH)
-    ini_path = os.path.join(mp_dir, cfg.TRAIN.MP_INI)
+    mp_path = os.path.join(MP_DATA_DIR, cfg.TRAIN.MP_PATH)
+    ini_path = os.path.join(MP_DATA_DIR, cfg.TRAIN.MP_INI)
     ps = Configer(default_ps_fname=ini_path)  # This is the default configuration
+
     motion_prior = MotionPrior(num_neurons=ps.num_neurons, latentD=ps.latentD, latentD_t=ps.latentD_t, dense_freq=ps.dense_freq, block_size=5, frequency_num=20, frame_num=ps.frame_num, use_cont_repr=ps.use_cont_repr)
     state_dict = torch.load(mp_path, map_location='cpu')
     new_state_dict = {k[7:]: v for k, v in state_dict.items()}
-    motion_prior.load_state_dict(new_state_dict)
+    motion_prior.load_state_dict(new_state_dict, strict=False)
     motion_prior = motion_prior.eval().cuda()
     
-    expr_dir = 'models/pre_trained/vposer_v1_0'
+    mp_dir = cfg.TRAIN.MP_DIR
+    expr_dir = 'human_motion_prior/models/pre_trained/vposer_v1_0'
     vposer, _ = load_vposer(os.path.join(mp_dir, expr_dir), vp_model='snapshot')
     vposer = vposer.eval().cuda()
 

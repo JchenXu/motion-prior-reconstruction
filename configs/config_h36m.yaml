@@ -13,15 +13,15 @@ LOSS:
   KP_3D_W: 300.0
   SHAPE_W: 0.06
   POSE_W: 60.0
-  D_MOTION_LOSS_W: 0.5
+  D_MOTION_LOSS_W: 0.0
 TRAIN:
   BATCH_SIZE: 32
   NUM_ITERS_PER_EPOCH: 1000
   PRETRAINED: ''
   PRETRAINED_REGRESSOR: ''
-  MP_DIR: '/mnt/lustre/xujiachen/project/human_motion_prior/human_motion_prior'
-  MP_PATH: 'test/TR00_E267.pt'
-  MP_INI: 'test/TR00_motion_prior.ini'
+  MP_DIR: '../human_motion_prior'
+  MP_PATH: 'pretrained_priorD.pth'
+  MP_INI: 'motion_prior_config.ini'
   RESUME: ''
   START_EPOCH: 0
   END_EPOCH: 200
