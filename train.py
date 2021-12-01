@@ -14,9 +14,7 @@
 #
 # Contact: ps-license@tuebingen.mpg.de
 
-import open3d
 import os
-os.environ['PYOPENGL_PLATFORM'] = 'egl'
 
 import torch
 import pprint
