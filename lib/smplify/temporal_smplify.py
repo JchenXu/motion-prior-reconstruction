@@ -4,7 +4,7 @@
 import os
 import torch
 
-from lib.core.config import VIBE_DATA_DIR
+from lib.core.config import MP_DATA_DIR
 from lib.models.smpl import SMPL, JOINT_IDS, SMPL_MODEL_DIR
 from lib.smplify.losses import temporal_camera_fitting_loss, temporal_body_fitting_loss
 
@@ -46,7 +46,7 @@ class TemporalSMPLify():
         self.num_iters = num_iters
 
         # GMM pose prior
-        self.pose_prior = MaxMixturePrior(prior_folder=VIBE_DATA_DIR,
+        self.pose_prior = MaxMixturePrior(prior_folder=MP_DATA_DIR,
                                           num_gaussians=8,
                                           dtype=torch.float32).to(device)
         self.use_lbfgs = use_lbfgs

@@ -21,6 +21,7 @@ import logging
 import numpy as np
 import os.path as osp
 import joblib
+import cv2
 
 from torch.utils.data import Dataset
 from lib.core.config import MP_DB_DIR
@@ -169,13 +170,15 @@ class Dataset3D(Dataset):
             target['instance_id'] = [f'{v}/{f}'for v,f in zip(vn,fi)]
 
 
+        if self.dataset_name == '3dpw' and not is_train:
+            imgname = self.db['img_name'][start_index:end_index+1].tolist()
+            img_array = []
+            # you may change to your img path
+            # for im in imgname:
+            #     img_array.append(cv2.imread(im[1:])[None, ...])
 
-        # if self.dataset_name == '3dpw' and not self.is_train:
-            # target['imgname'] = self.db['img_name'][start_index:end_index+1].tolist()
-            # target['imgname'] = np.array(target['imgname'])
-            # print(target['imgname'].dtype)
-            # target['center'] = self.db['bbox'][start_index:end_index+1, :2]
-            # target['valid'] = torch.from_numpy(self.db['valid'][start_index:end_index+1])
+            # target['img_array'] = np.concatenate(img_array, axis=0)
+            # target['bbox'] = np.array(self.db['bbox'][start_index:end_index + 1])
 
         if self.debug:
             from lib.data_utils.img_utils import get_single_image_crop

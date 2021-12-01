@@ -14,7 +14,7 @@
 #
 # Contact: ps-license@tuebingen.mpg.de
 
-import time
+import cv2
 import torch
 import shutil
 import logging
@@ -24,6 +24,8 @@ import tqdm
 
 from lib.core.config import MP_DATA_DIR
 from lib.utils.utils import move_dict_to_device, AverageMeter
+from lib.utils.renderer import Renderer
+from lib.utils.demo_utils import convert_crop_cam_to_orig_img
 
 from lib.utils.eval_utils import (
     compute_accel,
@@ -40,6 +42,7 @@ class Evaluator():
             model,
             motion_prior,
             vposer,
+            render=False,
             device=None,
     ):
         self.test_loader = test_loader
@@ -47,9 +50,10 @@ class Evaluator():
         self.model.eval()
         self.motion_prior = motion_prior
         self.vposer = vposer
+        self.render = render
         self.device = device
 
-        self.evaluation_accumulators = dict.fromkeys(['pred_j3d', 'target_j3d', 'target_theta', 'pred_verts'])
+        self.evaluation_accumulators = dict.fromkeys(['pred_j3d', 'target_j3d', 'target_theta', 'pred_verts', 'pred_theta'])
 
         if self.device is None:
             self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -74,17 +78,55 @@ class Evaluator():
             pred_j3d = preds[-1]['kp_3d'].view(-1, n_kp, 3).cpu().numpy()
             target_j3d = target['kp_3d'].view(-1, n_kp, 3).cpu().numpy()
             pred_verts = preds[-1]['verts'].view(-1, 6890, 3).cpu().numpy()
+            pred_theta = preds[-1]['theta'].view(pred_verts.shape[0], -1).cpu().numpy()
             target_theta = target['theta'].view(-1, 85).cpu().numpy()
 
 
             self.evaluation_accumulators['pred_verts'].append(pred_verts)
+            self.evaluation_accumulators['pred_theta'].append(pred_theta)
             self.evaluation_accumulators['target_theta'].append(target_theta)
 
             self.evaluation_accumulators['pred_j3d'].append(pred_j3d)
             self.evaluation_accumulators['target_j3d'].append(target_j3d)
         # =============>
 
-    def evaluate(self):
+    def render_func(self, target, pred_theta, pred_verts):
+        target['img_array'] = target['img_array'].cpu().numpy()
+        target['bbox'] = target['bbox'].cpu().numpy()
+        orig_height, orig_width = target['img_array'].shape[2:4]
+
+        renderer = Renderer(resolution=(orig_width, orig_height), orig_img=True, wireframe=False)
+
+        img_array = target['img_array'].reshape(-1, orig_height, orig_width, 3)
+        bbox = target['bbox'].reshape(img_array.shape[0], -1)
+
+        for ii in range(img_array.shape[0]):
+            bbox_ii = bbox[ii:ii + 1]
+            bbox_ii[:, 2:] = bbox_ii[:, 2:] * 1.2
+            img = img_array[ii:ii + 1]
+            cam = pred_theta[ii:ii + 1, :3]
+
+            orig_cam = convert_crop_cam_to_orig_img(
+                cam=cam,
+                bbox=bbox_ii,
+                img_width=orig_width,
+                img_height=orig_height
+            )
+
+            img = renderer.render(
+                img,
+                pred_verts[ii],
+                cam=orig_cam[0],
+                color=[1.0, 1.0, 0.9],
+                mesh_filename=None
+            )[0]
+
+            h, w = img.shape[:2]
+            new_h, new_w = int(h / 2), int(w / 2)
+            new_h, new_w = new_h if new_h % 2 == 0 else new_h - 1, new_w if new_w % 2 == 0 else new_w - 1  # for ffmpeg
+            img = cv2.resize(img, (new_w, new_h), interpolation=cv2.INTER_AREA)
+
+    def evaluate(self, target):
         for k, v in self.evaluation_accumulators.items():
             self.evaluation_accumulators[k] = np.vstack(v)
 
@@ -110,6 +152,7 @@ class Evaluator():
             S1_hat[i] = compute_similarity_transform_torch(pred_j3ds[i], target_j3ds[i])
         errors_pa = torch.sqrt(((S1_hat - target_j3ds) ** 2).sum(dim=-1)).mean(dim=-1).cpu().numpy()
         pred_verts = self.evaluation_accumulators['pred_verts']
+        pred_theta = self.evaluation_accumulators['pred_theta']
         target_theta = self.evaluation_accumulators['target_theta']
 
         m2mm = 1000
@@ -126,7 +169,7 @@ class Evaluator():
         pves, accels, accel_errs, mpjpes, pa_mpjpes = [], [], [], [], []
         for i, target in enumerate(tqdm.tqdm(self.test_loader)):
             self.validate(target)
-            pve, accel, accel_err, mpjpe, pa_mpjpe, num = self.evaluate()
+            pve, accel, accel_err, mpjpe, pa_mpjpe, num = self.evaluate(target)
             pves.append(pve)
             accels.append(accel)
             accel_errs.append(accel_err)

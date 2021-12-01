@@ -17,7 +17,7 @@ LOSS:
 TRAIN:
   BATCH_SIZE: 32
   NUM_ITERS_PER_EPOCH: 1000
-  PRETRAINED: './data/pretrained_model/pretrained.pth.tar'
+  PRETRAINED: ''
   PRETRAINED_REGRESSOR: ''
   MP_DIR: '../human_motion_prior'
   MP_PATH: 'pretrained_priorD.pth'
