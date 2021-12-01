@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 
 from lib.models import spin
 from lib.utils.vis import draw_skeleton
-from lib.core.config import VIBE_DB_DIR
+from lib.core.config import MP_DB_DIR
 from lib.data_utils.feature_extractor import extract_features
 
 class ImageCoder(object):
@@ -352,7 +352,7 @@ def concatenate_annotations():
     }
 
     for i in range(273):
-        filename = osp.join(VIBE_DB_DIR, 'insta_parts', f'insta_train_part_{i}.h5')
+        filename = osp.join(MP_DB_DIR, 'insta_parts', f'insta_train_part_{i}.h5')
         print(filename)
         with h5py.File(filename, 'r') as f:
             for k in ds.keys():
@@ -362,7 +362,7 @@ def concatenate_annotations():
         ds[k] = np.concatenate(ds[k])
 
     print('Saving Insta Variety dataset!..')
-    db_file = osp.join(VIBE_DB_DIR, 'insta_train_db.h5')
+    db_file = osp.join(MP_DB_DIR, 'insta_train_db.h5')
     save_hdf5(db_file, ds)
     print('Saved Insta Variety dataset!...')
 
@@ -376,12 +376,12 @@ if __name__ == '__main__':
     fpaths = glob(f'{args.dir}/{split}/*.tfrecord')
     fpaths = sorted(fpaths)
 
-    os.makedirs(osp.join(VIBE_DB_DIR, 'insta_parts'), exist_ok=True)
+    os.makedirs(osp.join(MP_DB_DIR, 'insta_parts'), exist_ok=True)
 
     for idx, fp in enumerate(fpaths):
         dataset = read_single_record(fp)
 
-        db_file = osp.join(VIBE_DB_DIR, 'insta_parts', f'insta_train_part_{idx}.h5')
+        db_file = osp.join(MP_DB_DIR, 'insta_parts', f'insta_train_part_{idx}.h5')
 
         save_hdf5(db_file, dataset)
 

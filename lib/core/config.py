@@ -19,14 +19,14 @@ from yacs.config import CfgNode as CN
 
 # CONSTANTS
 # You may modify them at will
-VIBE_DB_DIR = 'data/vibe_db_my'
+MP_DB_DIR = 'data/mp_db'
 AMASS_DIR = 'data/amass'
 INSTA_DIR = 'data/insta_variety'
 MPII3D_DIR = 'data/mpi_inf_3dhp'
 THREEDPW_DIR = 'data/3dpw'
 PENNACTION_DIR = 'data/penn_action'
 POSETRACK_DIR = 'data/posetrack'
-VIBE_DATA_DIR = 'data/vibe_data'
+MP_DATA_DIR = 'data/mp_data'
 
 # Configuration variables
 cfg = CN()

@@ -21,7 +21,7 @@ import torch.nn as nn
 import numpy as np
 import torch.nn.functional as F
 
-from lib.core.config import VIBE_DATA_DIR
+from lib.core.config import MP_DATA_DIR
 from lib.models.spin import Regressor, hmr
 from lib.utils.geometry import rot6d_to_rotmat
 
@@ -77,7 +77,7 @@ class VIBE(nn.Module):
             add_linear=False,
             bidirectional=False,
             use_residual=True,
-            pretrained=osp.join(VIBE_DATA_DIR, 'spin_model_checkpoint.pth.tar'),
+            pretrained=osp.join(MP_DATA_DIR, 'spin_model_checkpoint.pth.tar'),
     ):
 
         super(VIBE, self).__init__()

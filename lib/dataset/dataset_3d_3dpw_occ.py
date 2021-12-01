@@ -23,7 +23,7 @@ import os.path as osp
 import joblib
 
 from torch.utils.data import Dataset
-from lib.core.config import VIBE_DB_DIR
+from lib.core.config import MP_DB_DIR
 from lib.data_utils.kp_utils import convert_kps
 from lib.data_utils.img_utils import normalize_2d_kp, transfrom_keypoints, split_into_chunks
 
@@ -54,15 +54,15 @@ class Dataset3D(Dataset):
 
     def load_db(self):
         print('Using occ version ...', flush=True)
-        db_file = osp.join(VIBE_DB_DIR, f'{self.dataset_name}_{self.set}_db.pt')
+        db_file = osp.join(MP_DB_DIR, f'{self.dataset_name}_{self.set}_db.pt')
 
         if self.set == 'train':
             if self.dataset_name == '3dpw':
-                db_file = osp.join(VIBE_DB_DIR, f'{self.dataset_name}_{self.set}_occ_db.pt')
+                db_file = osp.join(MP_DB_DIR, f'{self.dataset_name}_{self.set}_occ_db.pt')
             elif self.dataset_name == 'mpii3d':
-                db_file = osp.join(VIBE_DB_DIR, f'{self.dataset_name}_{self.set}_scale12_occ_db.pt')
+                db_file = osp.join(MP_DB_DIR, f'{self.dataset_name}_{self.set}_scale12_occ_db.pt')
             elif 'h36m' in self.dataset_name:
-                db_file_occ = osp.join(VIBE_DB_DIR, f'{self.dataset_name}_{self.set}_50fps_occ_db.pt')
+                db_file_occ = osp.join(MP_DB_DIR, f'{self.dataset_name}_{self.set}_50fps_occ_db.pt')
 
         if osp.isfile(db_file):
             db = joblib.load(db_file)

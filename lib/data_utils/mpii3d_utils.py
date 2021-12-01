@@ -11,7 +11,7 @@ import os.path as osp
 import scipy.io as sio
 
 from lib.models import spin
-from lib.core.config import VIBE_DB_DIR
+from lib.core.config import MP_DB_DIR
 from lib.utils.utils import tqdm_enumerate
 from lib.data_utils.kp_utils import convert_kps
 from lib.data_utils.img_utils import get_bbox_from_kp2d
@@ -329,10 +329,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     dataset = read_test_data(args.dir)
-    joblib.dump(dataset, osp.join(VIBE_DB_DIR, 'mpii3d_val_db.pt'))
+    joblib.dump(dataset, osp.join(MP_DB_DIR, 'mpii3d_val_db.pt'))
 
     dataset = read_data_train(args.dir)
-    joblib.dump(dataset, osp.join(VIBE_DB_DIR, 'mpii3d_train_db.pt'))
+    joblib.dump(dataset, osp.join(MP_DB_DIR, 'mpii3d_train_db.pt'))
 
 
 

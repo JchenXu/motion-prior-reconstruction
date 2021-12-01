@@ -20,7 +20,7 @@ import numpy as np
 import os.path as osp
 from torch.utils.data import Dataset
 
-from lib.core.config import VIBE_DB_DIR
+from lib.core.config import MP_DB_DIR
 from lib.data_utils.img_utils import split_into_chunks
 
 class AMASS(Dataset):
@@ -41,7 +41,7 @@ class AMASS(Dataset):
         return self.get_single_item(index)
 
     def load_db(self):
-        db_file = osp.join(VIBE_DB_DIR, 'amass_db.pt')
+        db_file = osp.join(MP_DB_DIR, 'amass_db.pt')
         db = joblib.load(db_file)
         return db
 

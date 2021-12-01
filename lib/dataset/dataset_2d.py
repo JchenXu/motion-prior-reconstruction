@@ -24,7 +24,7 @@ import joblib
 
 from torch.utils.data import Dataset
 
-from lib.core.config import VIBE_DB_DIR
+from lib.core.config import MP_DB_DIR
 from lib.data_utils.kp_utils import convert_kps
 from lib.data_utils.img_utils import normalize_2d_kp, transfrom_keypoints, split_into_chunks
 
@@ -56,9 +56,9 @@ class Dataset2D(Dataset):
     def load_db(self):
         set = 'train'
 
-        db_file = osp.join(VIBE_DB_DIR, f'{self.dataset_name}_{set}_db.pt')
+        db_file = osp.join(MP_DB_DIR, f'{self.dataset_name}_{set}_db.pt')
         if self.dataset_name == 'posetrack':
-            db_file = osp.join(VIBE_DB_DIR, 'posetrack_train_occ_db.pt')
+            db_file = osp.join(MP_DB_DIR, 'posetrack_train_occ_db.pt')
 
         if osp.isfile(db_file):
             db = joblib.load(db_file)

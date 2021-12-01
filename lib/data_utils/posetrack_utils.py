@@ -25,7 +25,7 @@ import json
 import os.path as osp
 
 from lib.models import spin
-from lib.core.config import VIBE_DB_DIR
+from lib.core.config import MP_DB_DIR
 from lib.utils.utils import tqdm_enumerate
 from lib.data_utils.feature_extractor import extract_features
 from lib.data_utils.kp_utils import get_posetrack_original_kp_names, convert_kps
@@ -175,4 +175,4 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     dataset_train = read_data(args.dir, 'train')
-    joblib.dump(dataset_train, osp.join(VIBE_DB_DIR, 'posetrack_train_db.pt'))
+    joblib.dump(dataset_train, osp.join(MP_DB_DIR, 'posetrack_train_db.pt'))

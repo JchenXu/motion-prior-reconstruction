@@ -21,7 +21,7 @@ import numpy as np
 import os.path as osp
 from tqdm import tqdm
 
-from lib.core.config import VIBE_DB_DIR
+from lib.core.config import MP_DB_DIR
 
 dict_keys = ['betas', 'dmpls', 'gender', 'mocap_framerate', 'poses', 'trans']
 
@@ -143,6 +143,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     db = read_data(args.dir, sequences=all_sequences)
-    db_file = osp.join(VIBE_DB_DIR, 'amass_db.pt')
+    db_file = osp.join(MP_DB_DIR, 'amass_db.pt')
     print(f'Saving AMASS dataset to {db_file}')
     joblib.dump(db, db_file)

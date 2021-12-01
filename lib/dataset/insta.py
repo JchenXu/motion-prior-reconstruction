@@ -21,7 +21,7 @@ import numpy as np
 import os.path as osp
 
 from torch.utils.data import Dataset
-from lib.core.config import VIBE_DB_DIR
+from lib.core.config import MP_DB_DIR
 from lib.data_utils.kp_utils import convert_kps
 from lib.data_utils.img_utils import normalize_2d_kp, split_into_chunks
 
@@ -34,7 +34,7 @@ class Insta(Dataset):
         self.seqlen = seqlen
         self.stride = int(seqlen * (1-overlap))
 
-        self.h5_file = osp.join(VIBE_DB_DIR, 'insta_train_db.h5')
+        self.h5_file = osp.join(MP_DB_DIR, 'insta_train_db.h5')
 
         with h5py.File(self.h5_file, 'r') as db:
             self.db = db

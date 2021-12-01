@@ -28,7 +28,7 @@ from scipy.io import loadmat
 
 from lib.models import spin
 from lib.data_utils.kp_utils import *
-from lib.core.config import VIBE_DB_DIR
+from lib.core.config import MP_DB_DIR
 from lib.data_utils.img_utils import get_bbox_from_kp2d
 from lib.data_utils.feature_extractor import extract_features
 
@@ -123,5 +123,5 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     dataset = read_data(args.dir)
-    joblib.dump(dataset, osp.join(VIBE_DB_DIR, 'pennaction_train_db.pt'))
+    joblib.dump(dataset, osp.join(MP_DB_DIR, 'pennaction_train_db.pt'))
 

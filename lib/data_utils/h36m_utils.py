@@ -29,7 +29,7 @@ from tqdm import tqdm
 
 from lib.models import spin
 from lib.data_utils.kp_utils import *
-from lib.core.config import VIBE_DB_DIR, VIBE_DATA_DIR
+from lib.core.config import MP_DB_DIR, MP_DATA_DIR
 from lib.utils.smooth_bbox import get_smooth_bbox_params
 from lib.data_utils.occ_utils import load_occluders
 from lib.models.smpl import SMPL, SMPL_MODEL_DIR, H36M_TO_J14
@@ -73,7 +73,7 @@ def read_data(folder, set, debug=False):
 
     smpl = SMPL(SMPL_MODEL_DIR, batch_size=1, create_transl=False)
     if set == 'test' or set == 'validation':
-        J_regressor = torch.from_numpy(np.load(osp.join('/mnt/lustre/xujiachen/project/vibe/data/vibe_data', 'J_regressor_h36m.npy'))).float()
+        J_regressor = torch.from_numpy(np.load(osp.join(MP_DATA_DIR, 'J_regressor_h36m.npy'))).float()
 
     start_idx, end_idx = None, None
     for i, img in enumerate(tqdm(imgnames)):
@@ -168,8 +168,8 @@ if __name__ == '__main__':
     debug = False
 
     dataset = read_data(args.dir, 'train', debug=debug)
-    joblib.dump(dataset, osp.join('data', 'h36m_train_p1_50fps_occ_db.pt'))
+    joblib.dump(dataset, osp.join(MP_DB_DIR, 'h36m_train_p1_50fps_occ_db.pt'))
     #
     # dataset = read_data(args.dir, 'test', debug=debug)
-    # joblib.dump(dataset, osp.join(VIBE_DB_DIR, '3dpw_test_db.pt'))
+    # joblib.dump(dataset, osp.join(MP_DB_DIR, '3dpw_test_db.pt'))
 

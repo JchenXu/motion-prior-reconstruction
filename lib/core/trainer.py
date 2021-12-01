@@ -22,7 +22,7 @@ import numpy as np
 import os.path as osp
 from progress.bar import Bar
 
-from lib.core.config import VIBE_DATA_DIR
+from lib.core.config import MP_DATA_DIR
 from lib.utils.utils import move_dict_to_device, AverageMeter
 
 from lib.utils.eval_utils import (
@@ -269,7 +269,7 @@ class Trainer():
             for k,v in self.evaluation_accumulators.items():
                 self.evaluation_accumulators[k] = []
 
-        J_regressor = torch.from_numpy(np.load(osp.join(VIBE_DATA_DIR, 'J_regressor_h36m.npy'))).float()
+        J_regressor = torch.from_numpy(np.load(osp.join(MP_DATA_DIR, 'J_regressor_h36m.npy'))).float()
 
         for i, target in enumerate(self.valid_loader):
 
