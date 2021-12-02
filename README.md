@@ -2,7 +2,7 @@
 
 **This is the codebase for video-based human motion reconstruction in [human-motion-prior](https://github.com/JchenXu/human-motion-prior).**
 
-<p> <img src="teaser.png" width="80%"> </p>
+<p> <img src="assets/teaser.png" width="80%"> </p>
 
 [\[Video Demo\]](https://youtu.be/MLmCq0f-RP8) [\[Paper\]](https://arxiv.org/pdf/2111.13074.pdf)
 
@@ -26,17 +26,17 @@ pip install -r requirements.txt
 
 Please download the required data (i.e., our pre-trained prior model and SMPL model parameters) [here](https://drive.google.com/file/d/12LAlvHJ34qNkOqCVawSDjBquQH6MI2Ma/view?usp=sharing), and then, uncompress and put it in data/mp_data.
 
-Then, download our pre-processed data (except InstaVariety dataset) from [here](). Optinally, you can download the original dataset and preprocess by yourself. Then, put data files in data/mp_db.
+Then, refer to this for data generation, and put all data files in data/mp_db. 
 
-The project is like:
+The whole data directory is like:
 ```
-data
+motion-prior-reconstruction/data
 ├── mp_data
 │   ├── ...
 |   └── ...
 |
 ├── mp_db
-    ├── amass_db.pt
+    ├── 3dpw_train_db.pt
     └── insta_train_db.h5
     └── ...
 ```
@@ -58,7 +58,7 @@ export PYTHONPATH=../human_motion_prior
 python eval.py --cfg configs/config_3dpw.yaml
 ```
 
-Also, we provide our pre-trained checkpoint [here](https://drive.google.com/file/d/1yv4ZaNly-dQAfhQfrXeX0knao3u1if8A/view?usp=sharing).
+Also, we provide our pre-trained checkpoint [here](https://drive.google.com/file/d/1tbbCd09SmnFHO9IefmDV-Lfm1fi_ZaZI/view?usp=sharing).
 
 
 ## Citation

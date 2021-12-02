@@ -73,9 +73,13 @@ def extract_features(model, occluders, video, bbox, debug=False, batch_size=200,
         ).to(device)
     else:
         # crop bbox locations
-        video = torch.cat(
-            [get_single_image_crop(image, occluders, bbox, scale=scale, occ=True).unsqueeze(0) for image, bbox in zip(video, bbox)], dim=0
-        ).to(device)
+        if occluders is not None:
+            video = torch.cat(
+                [get_single_image_crop(image, occluders, bbox, scale=scale, occ=True).unsqueeze(0) for image, bbox in zip(video, bbox)], dim=0
+            ).to(device)
+        else:
+            video = torch.cat(
+                [get_single_image_crop(image, occluders, bbox, scale=scale, occ=False).unsqueeze(0) for image, bbox in zip(video, bbox)], dim=0
 
     features = []
 

@@ -59,7 +59,7 @@ def read_data(folder, set, debug=False):
 
     model = spin.get_pretrained_hmr()
 
-    h36m_data = np.load('/mnt/lustre/xujiachen/project/pose2shape/data/dataset_extras/h36m_train_spin_p1.npz')
+    h36m_data = os.path.join(folder, 'h36m_p1_{}.npz'.format(set))
     imgnames = h36m_data['imgname']
     centers = h36m_data['center']
     scales = h36m_data['scale']
@@ -91,7 +91,6 @@ def read_data(folder, set, debug=False):
         if start_idx is None or end_idx is None:
             continue
 
-        print(start_idx, end_idx)
         num_frames = end_idx - start_idx
         pose = torch.from_numpy(poses[start_idx:end_idx]).float()
         shape = torch.from_numpy(shapes[start_idx:end_idx]).float()
@@ -168,8 +167,10 @@ if __name__ == '__main__':
     debug = False
 
     dataset = read_data(args.dir, 'train', debug=debug)
-    joblib.dump(dataset, osp.join(MP_DB_DIR, 'h36m_train_p1_50fps_occ_db.pt'))
-    #
-    # dataset = read_data(args.dir, 'test', debug=debug)
-    # joblib.dump(dataset, osp.join(MP_DB_DIR, '3dpw_test_db.pt'))
+    joblib.dump(dataset, osp.join(MP_DB_DIR, 'h36m_p1_train_50fps_occ_db.pt'))
 
+    dataset = read_data(args.dir, 'train', debug=debug)
+    joblib.dump(dataset, osp.join(MP_DB_DIR, 'h36m_p1_train.pt'))
+
+    dataset = read_data(args.dir, 'test', debug=debug)
+    joblib.dump(dataset, osp.join(MP_DB_DIR, 'h36m_p1_test.pt'))
