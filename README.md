@@ -26,7 +26,7 @@ pip install -r requirements.txt
 
 Please download the required data (i.e., our pre-trained prior model and SMPL model parameters) [here](https://drive.google.com/file/d/12LAlvHJ34qNkOqCVawSDjBquQH6MI2Ma/view?usp=sharing), and then, uncompress and put it in data/mp_data.
 
-Then, refer to this for data generation, and put all data files in data/mp_db. 
+Then, refer to [this](https://github.com/JchenXu/motion-prior-reconstruction/blob/master/assets/data.md) for data generation, and put all data files in data/mp_db. 
 
 The whole data directory is like:
 ```
