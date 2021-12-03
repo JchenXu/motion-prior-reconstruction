@@ -1,3 +1,5 @@
+# This code is developed based on VIBE <https://github.com/mkocabas/VIBE>
+
 import os
 import torch
 
