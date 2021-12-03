@@ -41,7 +41,7 @@ VIS_THRESH = 0.3
 MIN_KP = 6
 H36M = [14, 3, 4, 5, 2, 1, 0, 16, 12, 17, 18, 9, 10, 11, 8, 7, 6]
 
-def read_data(folder, set, debug=False):
+def read_data(folder, set, occlude=False, debug=False):
 
     dataset = {
         'vid_name': [],
@@ -55,7 +55,10 @@ def read_data(folder, set, debug=False):
         'features': [],
     }
 
-    occluders = load_occluders('./data/VOC2012')
+    if occlude:
+        occluders = load_occluders('./data/VOC2012')
+    else:
+        occluders = None
 
     model = spin.get_pretrained_hmr()
 
@@ -166,7 +169,7 @@ if __name__ == '__main__':
 
     debug = False
 
-    dataset = read_data(args.dir, 'train', debug=debug)
+    dataset = read_data(args.dir, 'train', occlude=True, debug=debug)
     joblib.dump(dataset, osp.join(MP_DB_DIR, 'h36m_p1_train_50fps_occ_db.pt'))
 
     dataset = read_data(args.dir, 'train', debug=debug)
